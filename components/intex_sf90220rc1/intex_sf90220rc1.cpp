@@ -14,7 +14,7 @@ void IntexSF90220RC1::setup() {
 void IntexSF90220RC1::loop() {
   uint32_t now = millis();
   if (now - this->last_write_ > 2000) {
-    this->write_array({0x02, 0xFD, 0x04, 0x00});
+    this->write_array(kPowerPressed);
     this->last_write_ = now;
   }
 }
