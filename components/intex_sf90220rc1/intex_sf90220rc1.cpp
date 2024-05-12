@@ -1,31 +1,27 @@
 #include "esphome/core/log.h"
+#include "esphome/core/time.h"
 #include "intex_sf90220rc1.h"
 
 namespace esphome {
-namespace empty_compound_sensor {
+namespace intex_sf90220rc1 {
 
-static const char *TAG = "empty_compound_sensor.sensor";
+static const char *TAG = "intex_sf90220rc1";
 
-void EmptyCompoundSensor::setup() {
-
-}
-
-void EmptyCompoundSensor::loop() {
+void IntexSF90220RC1::setup() {
 
 }
 
-void EmptyCompoundSensor::update() {
-    if (this->sensor1_ != nullptr)
-      this->sensor1_->publish_state(1.0f);
-    if (this->sensor2_ != nullptr)
-      this->sensor2_->publish_state(2.0f);
-    if (this->sensor3_ != nullptr)
-      this->sensor3_->publish_state(3.0f);
+void IntexSF90220RC1::loop() {
+  uint32_t now = millis();
+  if (now - this->last_write_ > 2000) {
+    this->write_array({0x02, 0xFD, 0x04, 0x00});
+    this->last_write_ = now;
+  }
 }
 
-void EmptyCompoundSensor::dump_config() {
+void IntexSF90220RC1::dump_config() {
     ESP_LOGCONFIG(TAG, "Empty compound sensor");
 }
 
-} //namespace empty_compound_sensor
+} //namespace intex_sf90220rc1
 } //namespace esphome
