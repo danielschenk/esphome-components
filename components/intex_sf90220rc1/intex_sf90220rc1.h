@@ -17,8 +17,6 @@ class IntexSF90220RC1 : public Component, public uart::UARTDevice {
 
   protected:
     uint32_t last_write_{0};
-
-    static constexpr std::array<uint8_t, 4> kPowerPressed{0x02, 0xFD, 0x04, 0x00};
 };
 
 } //namespace intex_sf90220rc1
