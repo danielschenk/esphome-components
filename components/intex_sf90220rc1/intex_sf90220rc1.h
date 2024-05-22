@@ -5,11 +5,12 @@
 #include <array>
 #include <cstdint>
 #include <vector>
+
+namespace esphome {
 namespace switch_ {
 class Switch;
 }
 
-namespace esphome {
 namespace intex_sf90220rc1 {
 
 class IntexSF90220RC1 : public Component, public uart::UARTDevice {

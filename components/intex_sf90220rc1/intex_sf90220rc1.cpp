@@ -56,6 +56,10 @@ void IntexSF90220RC1::process_rx() {
     return;
   }
 
+  if (this->rx_msg_.empty()) {
+    return;
+  }
+
   process_msg();
 }
 

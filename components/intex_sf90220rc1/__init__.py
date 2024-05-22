@@ -1,17 +1,25 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
-from esphome.components import uart
+from esphome.components import uart, switch
 from esphome.const import CONF_ID
 
 DEPENDENCIES = ['uart']
+AUTOLOAD = ['switch']
+
+CONF_PUMP_ID = 'pump_id'
 
 intex_sf90220rc1_ns = cg.esphome_ns.namespace('intex_sf90220rc1')
 IntexSF90220RC1 = intex_sf90220rc1_ns.class_('IntexSF90220RC1', cg.Component, uart.UARTDevice)
 
-
 CONFIG_SCHEMA = cv.Schema({
     cv.GenerateID(): cv.declare_id(IntexSF90220RC1),
 }).extend(cv.COMPONENT_SCHEMA).extend(uart.UART_DEVICE_SCHEMA)
+
+PUMP_COMPONENT_SCHEMA = cv.Schema(
+    {
+        cv.Required(CONF_PUMP_ID): cv.use_id(IntexSF90220RC1),
+    }
+)
 
 
 def to_code(config):
