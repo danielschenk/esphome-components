@@ -3,6 +3,7 @@ import esphome.config_validation as cv
 from esphome.components import uart, switch
 from esphome.const import CONF_ID
 
+CODEOWNERS = ["@danielschenk"]
 DEPENDENCIES = ['uart']
 AUTOLOAD = ['switch']
 
