@@ -28,6 +28,7 @@ class IntexSF90220RC1 : public Component, public uart::UARTDevice {
     bool read_display_msg(uint8_t& display_byte);
 
     void update_power_state(bool state, const char* source);
+    void update_timer_state(uint8_t display_byte);
 
     uint32_t last_write_{0};
 
@@ -40,6 +41,8 @@ class IntexSF90220RC1 : public Component, public uart::UARTDevice {
     // due to lack of std::optional support, track this in a separate var
     bool power_state_known_{false};
     bool last_power_state_;
+    bool timer_hours_known_{false};
+    int timer_hours_;
     switch_::Switch *power_switch_{nullptr};
 };
 

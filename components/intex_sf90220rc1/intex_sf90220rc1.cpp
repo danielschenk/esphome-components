@@ -14,6 +14,7 @@ namespace messages {
   enum DisplayValue : uint8_t {
     kBlank = 0xBB,
     kDot = 0xAB,
+    kTimerDisabled = 0xFE,
   };
 
   static constexpr uint32_t kBaudRate = 2400;
@@ -82,7 +83,11 @@ void IntexSF90220RC1::process_msg() {
     if (!this->read_display_msg(display_byte)) {
       continue;
     }
-    update_power_state(display_byte != messages::DisplayValue::kDot, "display message");
+    bool power_on = display_byte != messages::DisplayValue::kDot;
+    update_power_state(power_on, "display message");
+    if (power_on && (display_byte != messages::DisplayValue::kBlank)) {
+      update_timer_state(display_byte);
+    }
   }
 
   this->last_rx_msg_time_ = millis();
@@ -118,8 +123,30 @@ void IntexSF90220RC1::update_power_state(bool state, const char* source) {
   }
 }
 
+void IntexSF90220RC1::update_timer_state(uint8_t display_byte) {
+  int hours;
+  if (display_byte == messages::DisplayValue::kTimerDisabled) {
+    hours = -1;
+  } else if (display_byte >= 0x00 && display_byte <= 0x12) {
+    hours = (display_byte & 0xF) + 10 * (display_byte >> 4);
+  } else {
+    ESP_LOGE(TAG, "Received unexpected display value: %#02x", display_byte);
+    return;
+  }
+
+  if (!this->timer_hours_known_ || hours != this->timer_hours_) {
+    if (hours == -1) {
+      ESP_LOGI(TAG, "Timer disabled");
+    } else {
+      ESP_LOGI(TAG, "Timer ending in %d hours", hours);
+    }
+    this->timer_hours_ = hours;
+    this->timer_hours_known_ = true;
+  }
+}
+
 void IntexSF90220RC1::dump_config() {
-    ESP_LOGCONFIG(TAG, "Intex SF90220RC1 filter pump");
+  ESP_LOGCONFIG(TAG, "Intex SF90220RC1 filter pump");
 }
 
 } //namespace intex_sf90220rc1
