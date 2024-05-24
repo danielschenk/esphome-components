@@ -116,7 +116,9 @@ bool IntexSF90220RC1::read_display_msg(uint8_t& display_byte) {
 
 void IntexSF90220RC1::update_power_state(bool state, const char* source) {
   if (!this->power_state_known_ || this->last_power_state_ != state) {
-    this->power_switch_->publish_state(state);
+    if (this->power_switch_ != nullptr) {
+      this->power_switch_->publish_state(state);
+    }
     ESP_LOGI(TAG, "Turned %s (%s)", state ? "on" : "off", source);
     this->last_power_state_ = state;
     this->power_state_known_ = true;
