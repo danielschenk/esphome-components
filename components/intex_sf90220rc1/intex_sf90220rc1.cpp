@@ -130,6 +130,7 @@ void IntexSF90220RC1::update_timer_state(uint8_t display_byte) {
   if (display_byte == messages::DisplayValue::kTimerDisabled) {
     hours = -1;
   } else if (display_byte >= 0x00 && display_byte <= 0x12) {
+    // a kind of BCD: the high nibble contains the tens, the low nibble the ones
     hours = (display_byte & 0xF) + 10 * (display_byte >> 4);
   } else {
     ESP_LOGE(TAG, "Received unexpected display value: %#02x", display_byte);
