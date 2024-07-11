@@ -5,7 +5,7 @@ from esphome.const import CONF_ID
 
 CODEOWNERS = ["@danielschenk"]
 DEPENDENCIES = ['uart']
-AUTOLOAD = ['switch']
+AUTO_LOAD = ['switch', 'intex_common']
 
 CONF_PUMP_ID = 'pump_id'
 

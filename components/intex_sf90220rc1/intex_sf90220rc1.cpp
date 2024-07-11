@@ -1,6 +1,6 @@
 #include "intex_sf90220rc1.h"
 #include "esphome/core/log.h"
-#include "esphome/core/time.h"
+#include "esphome/core/hal.h"
 #include "esphome/components/switch/switch.h"
 
 namespace esphome {
@@ -8,6 +8,8 @@ namespace intex_sf90220rc1 {
 
 namespace messages {
   static constexpr std::array<uint8_t, 4> kPowerPressed{0x02, 0xFD, 0x04, 0x00};
+  static constexpr std::array<uint8_t, 4> kTimePressed{0x02, 0xFD, 0x02, 0x00};
+  static constexpr std::array<uint8_t, 4> kLockUnlockPressed{0x02, 0xFD, 0x01, 0x00};
 
   static constexpr std::array<uint8_t, 2> kDisplayHeader{0x00, 0xFF};
   static constexpr size_t kMinReceiveSize = 4;
@@ -33,9 +35,9 @@ void IntexSF90220RC1::setup() {
 void IntexSF90220RC1::loop() {
   uint32_t now = millis();
   // for now, auto-toggle as a test
-  if (now - this->last_write_ > 2000) {
-    this->write_array(messages::kPowerPressed);
-    this->last_write_ = now;
+  if (now - this->last_auto_toggle > 2000) {
+    this->try_tx(messages::kPowerPressed);
+    this->last_auto_toggle = now;
   }
 
   process_rx();
@@ -67,6 +69,7 @@ void IntexSF90220RC1::process_rx() {
   }
 
   process_msg();
+  timer_setting_state_machine();
 }
 
 void IntexSF90220RC1::process_msg() {
@@ -85,6 +88,7 @@ void IntexSF90220RC1::process_msg() {
     }
     bool power_on = display_byte != messages::DisplayValue::kDot;
     update_power_state(power_on, "display message");
+    update_lock_state(display_byte, power_on);
     if (power_on && (display_byte != messages::DisplayValue::kBlank)) {
       update_timer_state(display_byte);
     }
@@ -119,7 +123,7 @@ void IntexSF90220RC1::update_power_state(bool state, const char* source) {
     if (this->power_switch_ != nullptr) {
       this->power_switch_->publish_state(state);
     }
-    ESP_LOGI(TAG, "Turned %s (%s)", state ? "on" : "off", source);
+    ESP_LOGI(TAG, "Turned %s (detected by %s)", state ? "on" : "off", source);
     this->last_power_state_ = state;
     this->power_state_known_ = true;
   }
@@ -146,6 +150,45 @@ void IntexSF90220RC1::update_timer_state(uint8_t display_byte) {
     this->timer_hours_ = hours;
     this->timer_hours_known_ = true;
   }
+}
+
+void IntexSF90220RC1::update_lock_state(uint8_t display_byte, bool power_on) {
+  this->lock_detector_.update(display_byte == messages::DisplayValue::kBlank, power_on);
+}
+
+void IntexSF90220RC1::timer_setting_state_machine() {
+  if (!this->lock_detector_.is_locked().has_value()
+      || !this->timer_hours_known_
+      || !this->power_state_known_) {
+    // do nothing until we know all state
+    return;
+  }
+
+  if (!this->last_power_state_) {
+    return;
+  }
+
+  if (this->timer_hours_ != -1) {
+    // try changing timer to infinite
+    if (*this->lock_detector_.is_locked()) {
+      try_tx(messages::kLockUnlockPressed, "lock/unlock");
+    } else {
+      try_tx(messages::kTimePressed, "time");
+    }
+  }
+}
+
+bool IntexSF90220RC1::try_tx(std::array<uint8_t, 4> message, const char *log_description) {
+  uint32_t now = millis();
+  if (now - this->last_tx_ < this->kTxIntervalMillis) {
+    return false;
+  }
+  this->write_array(message);
+  this->last_tx_ = now;
+  if (log_description) {
+    ESP_LOGD(TAG, "Transmitted message: %s", log_description);
+  }
+  return true;
 }
 
 void IntexSF90220RC1::dump_config() {
