@@ -1,4 +1,2 @@
-import esphome.codegen as cg
-
-lock_detector_ns = cg.esphome_ns.namespace("lock_detector")
-LockDetector = lock_detector_ns.class_("LockDetector")
+# Classes in this component aren't instantiated by the main program, so don't need to be
+# known by the esphome code generator.

@@ -43,6 +43,33 @@ void IntexSF90220RC1::loop() {
   process_rx();
 }
 
+optional<bool> IntexSF90220RC1::is_power_on() const {
+  return this->last_power_state_;
+}
+
+void IntexSF90220RC1::press_power() {
+  this->try_tx(messages::kPowerPressed, "power");
+}
+
+optional<bool> IntexSF90220RC1::is_locked() const {
+  return this->lock_detector_.is_locked();
+}
+
+void IntexSF90220RC1::press_toggle_lock() {
+  this->try_tx(messages::kLockUnlockPressed, "lock/unlock");
+}
+
+intex_common::CommonHmi::TimerSetting IntexSF90220RC1::timer_setting() const {
+  if (!this->timer_setting_.has_value()) {
+    return TimerSetting::UNKNOWN;
+  }
+  return *this->timer_setting_;
+}
+
+void IntexSF90220RC1::press_increment_timer_setting() {
+  this->try_tx(messages::kTimePressed, "time");
+}
+
 void IntexSF90220RC1::process_rx() {
   uint32_t now = millis();
   if (now - this->last_rx_msg_time_ >= messages::kDisplayMessageTimeoutMillis) {
@@ -68,8 +95,8 @@ void IntexSF90220RC1::process_rx() {
     return;
   }
 
-  process_msg();
-  timer_setting_state_machine();
+  this->process_msg();
+  this->timer_immobilizer_.update();
 }
 
 void IntexSF90220RC1::process_msg() {
@@ -119,63 +146,46 @@ bool IntexSF90220RC1::read_display_msg(uint8_t& display_byte) {
 }
 
 void IntexSF90220RC1::update_power_state(bool state, const char* source) {
-  if (!this->power_state_known_ || this->last_power_state_ != state) {
-    if (this->power_switch_ != nullptr) {
-      this->power_switch_->publish_state(state);
+  if (this->last_power_state_.has_value()) {
+    if (*this->last_power_state_ == state) {
+      return;
     }
-    ESP_LOGI(TAG, "Turned %s (detected by %s)", state ? "on" : "off", source);
-    this->last_power_state_ = state;
-    this->power_state_known_ = true;
   }
+
+  if (this->power_switch_ != nullptr) {
+    this->power_switch_->publish_state(state);
+  }
+  ESP_LOGI(TAG, "Turned %s (detected by %s)", state ? "on" : "off", source);
+  this->last_power_state_ = state;
 }
 
 void IntexSF90220RC1::update_timer_state(uint8_t display_byte) {
-  int hours;
+  TimerSetting setting;
   if (display_byte == messages::DisplayValue::kTimerDisabled) {
-    hours = -1;
+    setting = TimerSetting::INFINITE;
   } else if (display_byte >= 0x00 && display_byte <= 0x12) {
     // a kind of BCD: the high nibble contains the tens, the low nibble the ones
-    hours = (display_byte & 0xF) + 10 * (display_byte >> 4);
+    setting = static_cast<TimerSetting>((display_byte & 0xF) + 10 * (display_byte >> 4));
   } else {
     ESP_LOGE(TAG, "Received unexpected display value: %#02x", display_byte);
     return;
   }
 
-  if (!this->timer_hours_known_ || hours != this->timer_hours_) {
-    if (hours == -1) {
-      ESP_LOGI(TAG, "Timer disabled");
-    } else {
-      ESP_LOGI(TAG, "Timer ending in %d hours", hours);
+  if (this->timer_setting_.has_value()) {
+    if (*this->timer_setting_ == setting) {
+      return;
     }
-    this->timer_hours_ = hours;
-    this->timer_hours_known_ = true;
   }
+  if (setting == TimerSetting::INFINITE) {
+    ESP_LOGI(TAG, "Timer disabled");
+  } else {
+    ESP_LOGI(TAG, "Timer ending in %d hours", static_cast<int>(setting));
+  }
+  this->timer_setting_ = setting;
 }
 
 void IntexSF90220RC1::update_lock_state(uint8_t display_byte, bool power_on) {
   this->lock_detector_.update(display_byte == messages::DisplayValue::kBlank, power_on);
-}
-
-void IntexSF90220RC1::timer_setting_state_machine() {
-  if (!this->lock_detector_.is_locked().has_value()
-      || !this->timer_hours_known_
-      || !this->power_state_known_) {
-    // do nothing until we know all state
-    return;
-  }
-
-  if (!this->last_power_state_) {
-    return;
-  }
-
-  if (this->timer_hours_ != -1) {
-    // try changing timer to infinite
-    if (*this->lock_detector_.is_locked()) {
-      try_tx(messages::kLockUnlockPressed, "lock/unlock");
-    } else {
-      try_tx(messages::kTimePressed, "time");
-    }
-  }
 }
 
 bool IntexSF90220RC1::try_tx(std::array<uint8_t, 4> message, const char *log_description) {
