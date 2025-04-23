@@ -41,6 +41,7 @@ void IntexSF90220RC1::loop() {
   }
 
   process_rx();
+  this->timer_immobilizer_.update();
 }
 
 optional<bool> IntexSF90220RC1::is_power_on() const {
@@ -96,7 +97,6 @@ void IntexSF90220RC1::process_rx() {
   }
 
   this->process_msg();
-  this->timer_immobilizer_.update();
 }
 
 void IntexSF90220RC1::process_msg() {
