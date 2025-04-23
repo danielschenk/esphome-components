@@ -52,8 +52,6 @@ class IntexSF90220RC1 : public Component, public uart::UARTDevice, public intex_
     static constexpr uint32_t kTxIntervalMillis = 250;
     uint32_t last_tx_{0};
 
-    uint32_t last_auto_toggle{0};
-
     // discard at boot until frame timeout (might have woken up in the middle of a frame)
     bool receiving_{false};
     uint32_t last_rx_byte_time_{0};

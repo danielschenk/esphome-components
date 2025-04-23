@@ -33,13 +33,6 @@ void IntexSF90220RC1::setup() {
 }
 
 void IntexSF90220RC1::loop() {
-  uint32_t now = millis();
-  // for now, auto-toggle as a test
-  if (now - this->last_auto_toggle > 2000) {
-    this->try_tx(messages::kPowerPressed);
-    this->last_auto_toggle = now;
-  }
-
   process_rx();
   this->timer_immobilizer_.update();
 }
