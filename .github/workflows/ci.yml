@@ -1,12 +1,12 @@
 name: CI
 
 on:
+  push:
+    branches:
+      - master
   pull_request:
-    paths:
-      - '*.yaml'
-      - '.github/workflows/ci.yml'
-  schedule:
-    - cron: '0 0 * * *'
+    branches:
+      - master
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
