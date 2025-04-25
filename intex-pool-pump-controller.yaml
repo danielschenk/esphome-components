@@ -33,7 +33,7 @@ switch:
   - platform: intex_sf90220rc1
     pump_id: pool_pump
     power_switch:
-      id: pool_pump
+      id: pool_pump_power
       name: Pool pump
       icon: mdi:pump
 
