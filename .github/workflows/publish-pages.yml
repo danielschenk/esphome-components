@@ -3,7 +3,7 @@ name: Publish Pages
 on:
   push:
     branches:
-      - main
+      - master
     paths:
       - 'static/**'
       - '.github/workflows/publish-pages.yml'

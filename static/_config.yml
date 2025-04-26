@@ -1,5 +1,4 @@
-title: Intex pool filtration controller for ESPHome
+title: Daniël's ESPHome components
 description: |
-  This is custom firmware based on ESPHome, which allows you to control certain Intex pool
-  filtration pumps and saltwater chlorinators with an ESP32 microcontroller.
+  Intex pool filtration controller for ESPHome
 theme: jekyll-theme-slate
