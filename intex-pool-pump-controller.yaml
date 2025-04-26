@@ -1,0 +1,46 @@
+esphome:
+  name: pool-pump
+  friendly_name: Pool pump controller
+  # Automatically add the mac address to the name
+  # so you can use a single firmware for all devices
+  name_add_mac_suffix: true
+
+esp32:
+  board: nodemcu-32s
+
+# To be able to get logs from the device via serial and api.
+logger:
+
+# API is a requirement of the dashboard import.
+api:
+
+# OTA is required for Over-the-Air updating
+ota:
+  - platform: esphome
+
+wifi:
+  # Set up a wifi access point using the device name above
+  ap:
+
+# In combination with the `ap` this allows the user
+# to provision wifi credentials to the device.
+captive_portal:
+
+intex_sf90220rc1:
+  id: pool_pump
+
+switch:
+  - platform: intex_sf90220rc1
+    pump_id: pool_pump
+    power_switch:
+      id: pool_pump_power
+      name: Pool pump
+      icon: mdi:pump
+
+uart:
+  tx_pin: GPIO32
+  rx_pin: GPIO33
+  baud_rate: 2400
+
+external_components:
+  - source: components
