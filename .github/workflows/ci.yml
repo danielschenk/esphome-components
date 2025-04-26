@@ -4,9 +4,17 @@ on:
   push:
     branches:
       - master
+    paths-ignore:
+      - 'static/**'
+      - '.github/workflows/publish-pages.yml'
+      - '.github/workflows/publish-firmware.yml'
   pull_request:
     branches:
       - master
+    paths-ignore:
+      - 'static/**'
+      - '.github/workflows/publish-pages.yml'
+      - '.github/workflows/publish-firmware.yml'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
