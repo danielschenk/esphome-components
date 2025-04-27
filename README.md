@@ -1,5 +1,7 @@
 # ESPHome firmware for Intex pool filtration systems
 
+[![CI](https://github.com/danielschenk/esphome-intex-pool-controller/actions/workflows/ci.yml/badge.svg)](https://github.com/danielschenk/esphome-intex-pool-controller/actions/workflows/ci.yml)
+
 This repository contains firmware which allows remotely controlling certain types of Intex
 pool filtration pumps and saltwater chlorinators. The firmware is intended to be used on
 an ESP32 board, which needs to be added as a modification to these devices.

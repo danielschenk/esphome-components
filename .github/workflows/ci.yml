@@ -8,6 +8,8 @@ on:
       - 'static/**'
       - '.github/workflows/publish-pages.yml'
       - '.github/workflows/publish-firmware.yml'
+      - 'README.md'
+      - '.vscode/**'
   pull_request:
     branches:
       - master
@@ -15,6 +17,8 @@ on:
       - 'static/**'
       - '.github/workflows/publish-pages.yml'
       - '.github/workflows/publish-firmware.yml'
+      - 'README.md'
+      - '.vscode/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
