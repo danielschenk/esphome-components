@@ -1,6 +1,6 @@
-# About
-
 ![Project banner](project-banner.png)
+
+# About
 
 This is custom firmware based on ESPHome, which allows you to remote control certain Intex
 pool filtration pumps and saltwater chlorinators with an ESP32 microcontroller, which
