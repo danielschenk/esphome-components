@@ -30,7 +30,7 @@ jobs:
       matrix:
         #### Modify below here to match your project ####
         file:
-          - intex-pool-pump-controller
+          - pump-controller
         #### Modify above here to match your project ####
 
         esphome-version:

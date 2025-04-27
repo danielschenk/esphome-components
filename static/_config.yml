@@ -1,4 +1,4 @@
-title: Daniël's ESPHome components
+title: ESPHome Intex Pool Controller
 description: |
-  Intex pool filtration controller for ESPHome
+  Firmware to remote control Intex pool filtration systems with ESPHome
 theme: jekyll-theme-slate

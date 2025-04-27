@@ -1,6 +1,6 @@
 packages:
   # Include all of the core configuration
-  core: !include intex-pool-pump-controller.yaml
+  core: !include pump-controller.yaml
 
 esphome:
   # This will allow for project identification,
@@ -13,7 +13,7 @@ esphome:
 # In this case it is the core yaml file that does not contain the extra things
 # that are provided by this factory yaml file as the user does not need these once adopted.
 dashboard_import:
-  package_import_url: github://danielschenk/esphome-components/intex-pool-pump-controller.yaml@master
+  package_import_url: github://danielschenk/esphome-intex-pool-controller/pump-controller.yaml@master
 
 # Sets up Bluetooth LE (Only on ESP32) to allow the user
 # to provision wifi credentials to the device.
