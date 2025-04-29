@@ -54,3 +54,24 @@ jobs:
         with:
           yaml-file: ${{ matrix.file }}.factory.yaml
           version: ${{ matrix.esphome-version }}
+
+  unit-test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4.2.2
+
+      - name: Build Tests
+        uses: threeal/cmake-action@v2.1.0
+
+      - name: Run Tests
+        uses: threeal/ctest-action@v1.1.0
+        with:
+          args: --output-junit test-results.xml
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: build/test-results.xml

@@ -1,3 +1,7 @@
+#
+# NOTE: CMake is used for unit testing only! Firmware is built using esphome.
+#
+
 cmake_minimum_required(VERSION 3.14)
 project(my_project)
 
