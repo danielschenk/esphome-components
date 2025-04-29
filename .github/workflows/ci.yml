@@ -70,8 +70,20 @@ jobs:
         with:
           args: --output-junit test-results.xml
 
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
+      - name: Upload Test Results
         if: always()
+        uses: actions/upload-artifact@v4
         with:
-          files: build/test-results.xml
+          name: Test Results
+          path: |
+            build/test-results.xml
+
+  event_file:
+    name: "Event File"
+    runs-on: ubuntu-latest
+    steps:
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: Event File
+        path: ${{ github.event_path }}
