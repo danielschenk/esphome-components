@@ -65,6 +65,13 @@ jobs:
       - name: Build Tests
         uses: threeal/cmake-action@v2.1.0
 
+      - name: Check binary exists (FOR DEBUGGING)
+        run: |
+          if [ ! -f build/components/intex_eco5220g/intex_eco5220g_test ]; then
+            echo "Binary not found!"
+            exit 1
+          fi
+
       - name: Run Tests
         uses: threeal/ctest-action@v1.1.0
         with:
