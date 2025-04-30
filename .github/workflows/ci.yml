@@ -65,15 +65,10 @@ jobs:
       - name: Build Tests
         uses: threeal/cmake-action@v2.1.0
 
-      # - name: Run Tests
-      #   uses: threeal/ctest-action@v1.1.0
-      #   with:
-      #     args: --output-junit test-results.xml
-
       - name: Run Tests
-        run: |
-          cd build
-          ctest --output-junit test-results.xml
+        uses: threeal/ctest-action@v1.1.0
+        with:
+          args: --output-junit test-results.xml
 
       - name: Upload Test Results
         if: always()

@@ -1,3 +1,5 @@
+enable_testing()
+
 add_executable(
   intex_eco5220g_test
   display_message.cpp
