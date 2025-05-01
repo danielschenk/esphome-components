@@ -1,6 +1,7 @@
 #pragma once
 #include <array>
 #include <cstdint>
+#include <cstddef>
 
 namespace esphome {
 namespace intex_eco5220g {
