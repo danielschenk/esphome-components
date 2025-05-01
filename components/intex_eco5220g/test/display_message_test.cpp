@@ -1,9 +1,15 @@
+#include "../display_message.h"
 #include <gtest/gtest.h>
 
-// Demonstrate some basic assertions.
-TEST(HelloTest, BasicAssertions) {
-  // Expect two strings not to be equal.
-  EXPECT_STRNE("hello", "world");
-  // Expect equality.
-  EXPECT_EQ(7 * 6, 42);
+namespace esphome {
+namespace intex_eco5220g {
+
+TEST(DisplayMessageTest, IsPowerOnSet) {
+  DisplayMessage message;
+  EXPECT_FALSE(message.is_power_on_set());
+  DisplayMessage message2({0, 0, 0x02, 0});
+  EXPECT_TRUE(message2.is_power_on_set());
 }
+
+} // namespace intex_eco5220g
+} // namespace esphome
