@@ -45,12 +45,45 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4.2.2
       - name: ESPHome ${{ matrix.esphome-version }}
-        uses: esphome/build-action@v6.0.0
+        uses: esphome/build-action@v7.0.0
         with:
           yaml-file: ${{ matrix.file }}.yaml
           version: ${{ matrix.esphome-version }}
       - name: ESPHome ${{ matrix.esphome-version }} Factory
-        uses: esphome/build-action@v6.0.0
+        uses: esphome/build-action@v7.0.0
         with:
           yaml-file: ${{ matrix.file }}.factory.yaml
           version: ${{ matrix.esphome-version }}
+
+  unit-test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4.2.2
+
+      - name: Build Tests
+        uses: threeal/cmake-action@v2.1.0
+
+      - name: Run Tests
+        uses: threeal/ctest-action@v1.1.0
+        with:
+          args: --output-junit test-results.xml
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Test Results
+          path: |
+            build/test-results.xml
+
+  event_file:
+    name: "Event File"
+    runs-on: ubuntu-latest
+    steps:
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: Event File
+        path: ${{ github.event_path }}
