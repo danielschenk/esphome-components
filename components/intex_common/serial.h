@@ -1,7 +1,7 @@
 #pragma once
 
-#include <cstdint>
 #include <array>
+#include <cstdint>
 #include <functional>
 
 namespace esphome {
@@ -14,7 +14,7 @@ class Serial {
 
     template <size_t N>
     void send(const std::array<uint8_t, N>& data) {
-        this->send(data.data(), N);
+      this->send(data.data(), N);
     }
 
     virtual void send(const uint8_t* data, size_t length) = 0;
@@ -29,5 +29,5 @@ class Serial {
     std::function<void(const uint8_t*, size_t)> receive_callback_;
 };
 
-} // namespace intex_common
-} // namespace esphome
+}  // namespace intex_common
+}  // namespace esphome

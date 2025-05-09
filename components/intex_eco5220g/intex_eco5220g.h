@@ -1,13 +1,14 @@
 #pragma once
 
-#include "esphome/components/intex_common/lock_detector.h"
-#include "esphome/components/intex_common/common_hmi.h"
-#include "esphome/components/intex_common/timer_immobilizer.h"
-#include "esphome/core/component.h"
-#include "esphome/core/optional.h"
 #include <array>
 #include <cstdint>
 #include <deque>
+
+#include "esphome/components/intex_common/common_hmi.h"
+#include "esphome/components/intex_common/lock_detector.h"
+#include "esphome/components/intex_common/timer_immobilizer.h"
+#include "esphome/core/component.h"
+#include "esphome/core/optional.h"
 
 namespace esphome {
 namespace switch_ {
@@ -18,7 +19,6 @@ namespace intex_eco5220g {
 
 class IntexSF90220RC1 : public Component, public intex_common::CommonHmi {
   public:
-
     void setup() override;
     void loop() override;
     void dump_config() override;
@@ -44,5 +44,5 @@ class IntexSF90220RC1 : public Component, public intex_common::CommonHmi {
     switch_::Switch *power_switch_{nullptr};
 };
 
-} //namespace intex_eco5220g
-} //namespace esphome
+}  // namespace intex_eco5220g
+}  // namespace esphome
