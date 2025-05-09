@@ -5,6 +5,7 @@
     },
     "C_Cpp.default.cppStandard": "c++11",
     "files.associations": {
+        "*.h": "cpp",
         "__bit_reference": "cpp",
         "__config": "cpp",
         "__hash_table": "cpp",
