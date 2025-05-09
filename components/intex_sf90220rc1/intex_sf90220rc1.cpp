@@ -1,53 +1,47 @@
 #include "intex_sf90220rc1.h"
-#include "esphome/core/log.h"
-#include "esphome/core/hal.h"
+
 #include "esphome/components/switch/switch.h"
+#include "esphome/core/hal.h"
+#include "esphome/core/log.h"
 
 namespace esphome {
 namespace intex_sf90220rc1 {
 
 namespace messages {
-  static constexpr std::array<uint8_t, 4> kPowerPressed{0x02, 0xFD, 0x04, 0x00};
-  static constexpr std::array<uint8_t, 4> kTimePressed{0x02, 0xFD, 0x02, 0x00};
-  static constexpr std::array<uint8_t, 4> kLockUnlockPressed{0x02, 0xFD, 0x01, 0x00};
+static constexpr std::array<uint8_t, 4> kPowerPressed{0x02, 0xFD, 0x04, 0x00};
+static constexpr std::array<uint8_t, 4> kTimePressed{0x02, 0xFD, 0x02, 0x00};
+static constexpr std::array<uint8_t, 4> kLockUnlockPressed{0x02, 0xFD, 0x01, 0x00};
 
-  static constexpr std::array<uint8_t, 2> kDisplayHeader{0x00, 0xFF};
-  static constexpr size_t kMinReceiveSize = 4;
-  enum DisplayValue : uint8_t {
-    kBlank = 0xBB,
-    kDot = 0xAB,
-    kTimerDisabled = 0xFE,
-  };
+static constexpr std::array<uint8_t, 2> kDisplayHeader{0x00, 0xFF};
+static constexpr size_t kMinReceiveSize = 4;
+enum DisplayValue : uint8_t {
+  kBlank = 0xBB,
+  kDot = 0xAB,
+  kTimerDisabled = 0xFE,
+};
 
-  static constexpr uint32_t kBaudRate = 2400;
-  static constexpr uint32_t kCharacterBits = 10; // 8N1: 8 data bits, no parity, 1 start and 1 stop bit
-  static constexpr uint32_t kCharacterTimeoutMillis = 1000 * (1.5 * kCharacterBits / kBaudRate);
+static constexpr uint32_t kBaudRate = 2400;
+static constexpr uint32_t kCharacterBits =
+    10;  // 8N1: 8 data bits, no parity, 1 start and 1 stop bit
+static constexpr uint32_t kCharacterTimeoutMillis = 1000 * (1.5 * kCharacterBits / kBaudRate);
 
-  static constexpr uint32_t kDisplayMessageTimeoutMillis = 1000;
-} //namespace messages
+static constexpr uint32_t kDisplayMessageTimeoutMillis = 1000;
+}  // namespace messages
 
-static const char *TAG = "intex_sf90220rc1";
+static const char* TAG = "intex_sf90220rc1";
 
-void IntexSF90220RC1::setup() {
-
-}
+void IntexSF90220RC1::setup() {}
 
 void IntexSF90220RC1::loop() {
   process_rx();
   this->timer_immobilizer_.update();
 }
 
-optional<bool> IntexSF90220RC1::is_power_on() const {
-  return this->last_power_state_;
-}
+optional<bool> IntexSF90220RC1::is_power_on() const { return this->last_power_state_; }
 
-void IntexSF90220RC1::press_power() {
-  this->try_tx(messages::kPowerPressed, "power");
-}
+void IntexSF90220RC1::press_power() { this->try_tx(messages::kPowerPressed, "power"); }
 
-optional<bool> IntexSF90220RC1::is_locked() const {
-  return this->lock_detector_.is_locked();
-}
+optional<bool> IntexSF90220RC1::is_locked() const { return this->lock_detector_.is_locked(); }
 
 void IntexSF90220RC1::press_toggle_lock() {
   this->try_tx(messages::kLockUnlockPressed, "lock/unlock");
@@ -124,8 +118,7 @@ bool IntexSF90220RC1::read_display_msg(uint8_t& display_byte) {
   header2 = this->rx_buf_.front();
   this->rx_buf_.pop_front();
 
-  if (header1 != messages::kDisplayHeader[0] ||
-      header2 != messages::kDisplayHeader[1]) {
+  if (header1 != messages::kDisplayHeader[0] || header2 != messages::kDisplayHeader[1]) {
     ESP_LOGD(TAG, "Received invalid frame: unexpected header");
     this->rx_buf_.pop_front();
     this->rx_buf_.pop_front();
@@ -181,7 +174,7 @@ void IntexSF90220RC1::update_lock_state(uint8_t display_byte, bool power_on) {
   this->lock_detector_.update(display_byte == messages::DisplayValue::kBlank, power_on);
 }
 
-bool IntexSF90220RC1::try_tx(std::array<uint8_t, 4> message, const char *log_description) {
+bool IntexSF90220RC1::try_tx(std::array<uint8_t, 4> message, const char* log_description) {
   uint32_t now = millis();
   if (now - this->last_tx_ < this->kTxIntervalMillis) {
     return false;
@@ -194,9 +187,7 @@ bool IntexSF90220RC1::try_tx(std::array<uint8_t, 4> message, const char *log_des
   return true;
 }
 
-void IntexSF90220RC1::dump_config() {
-  ESP_LOGCONFIG(TAG, "Intex SF90220RC1 filter pump");
-}
+void IntexSF90220RC1::dump_config() { ESP_LOGCONFIG(TAG, "Intex SF90220RC1 filter pump"); }
 
-} //namespace intex_sf90220rc1
-} //namespace esphome
+}  // namespace intex_sf90220rc1
+}  // namespace esphome

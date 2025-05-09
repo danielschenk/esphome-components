@@ -1,4 +1,9 @@
 {
+    "[cpp]":{
+        "editor.tabSize": 2,
+        "editor.formatOnSave": true
+    },
+    "C_Cpp.default.cppStandard": "c++11",
     "files.associations": {
         "__bit_reference": "cpp",
         "__config": "cpp",

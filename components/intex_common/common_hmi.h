@@ -24,5 +24,5 @@ class CommonHmi {
     virtual void press_increment_timer_setting() = 0;
 };
 
-}
-}
+}  // namespace intex_common
+}  // namespace esphome

@@ -1,14 +1,15 @@
 #pragma once
 
-#include "esphome/components/intex_common/lock_detector.h"
-#include "esphome/components/intex_common/common_hmi.h"
-#include "esphome/components/intex_common/timer_immobilizer.h"
-#include "esphome/core/component.h"
-#include "esphome/core/optional.h"
-#include "esphome/components/uart/uart.h"
 #include <array>
 #include <cstdint>
 #include <deque>
+
+#include "esphome/components/intex_common/common_hmi.h"
+#include "esphome/components/intex_common/lock_detector.h"
+#include "esphome/components/intex_common/timer_immobilizer.h"
+#include "esphome/components/uart/uart.h"
+#include "esphome/core/component.h"
+#include "esphome/core/optional.h"
 
 namespace esphome {
 namespace switch_ {
@@ -19,7 +20,6 @@ namespace intex_sf90220rc1 {
 
 class IntexSF90220RC1 : public Component, public uart::UARTDevice, public intex_common::CommonHmi {
   public:
-
     void setup() override;
     void loop() override;
     void dump_config() override;
@@ -38,9 +38,9 @@ class IntexSF90220RC1 : public Component, public uart::UARTDevice, public intex_
   protected:
     void process_rx();
     void process_msg();
-    bool read_display_msg(uint8_t& display_byte);
+    bool read_display_msg(uint8_t &display_byte);
 
-    void update_power_state(bool state, const char* source);
+    void update_power_state(bool state, const char *source);
     void update_timer_state(uint8_t display_byte);
 
     intex_common::LockDetector lock_detector_;
@@ -64,5 +64,5 @@ class IntexSF90220RC1 : public Component, public uart::UARTDevice, public intex_
     switch_::Switch *power_switch_{nullptr};
 };
 
-} //namespace intex_sf90220rc1
-} //namespace esphome
+}  // namespace intex_sf90220rc1
+}  // namespace esphome

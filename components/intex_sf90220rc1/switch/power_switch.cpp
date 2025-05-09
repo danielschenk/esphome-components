@@ -1,7 +1,8 @@
 #include "power_switch.h"
+
 #include "../intex_sf90220rc1.h"
-#include "esphome/core/log.h"
 #include "esphome/core/application.h"
+#include "esphome/core/log.h"
 
 namespace esphome {
 namespace intex_sf90220rc1 {
@@ -29,5 +30,5 @@ void PowerSwitch::write_state(bool state) {
   }
 }
 
-}  // namespace intexsf90220rc1
+}  // namespace intex_sf90220rc1
 }  // namespace esphome

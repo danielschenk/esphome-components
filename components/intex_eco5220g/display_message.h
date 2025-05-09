@@ -1,7 +1,7 @@
 #pragma once
 #include <array>
-#include <cstdint>
 #include <cstddef>
+#include <cstdint>
 
 namespace esphome {
 namespace intex_eco5220g {
@@ -19,13 +19,12 @@ class DisplayMessage {
 
   protected:
     static constexpr size_t kLedByteOffset = 2;
-    enum LedBit : uint8_t
-    {
+    enum LedBit : uint8_t {
       kPowerOn = 0x02,
     };
 
     RawMessage raw_message_{0};
 };
 
-} //namespace intex_eco5220g
-} //namespace esphome
+}  // namespace intex_eco5220g
+}  // namespace esphome

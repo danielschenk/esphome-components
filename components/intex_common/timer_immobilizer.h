@@ -19,5 +19,5 @@ class TimerImmobilizer {
     static constexpr uint32_t kButtonPressIntervalMillis = 500;
 };
 
-} //namespace intex_common
-} //namespace esphome
+}  // namespace intex_common
+}  // namespace esphome

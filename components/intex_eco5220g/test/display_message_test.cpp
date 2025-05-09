@@ -1,4 +1,5 @@
 #include "../display_message.h"
+
 #include <gtest/gtest.h>
 
 namespace esphome {
@@ -11,5 +12,5 @@ TEST(DisplayMessageTest, IsPowerOnSet) {
   EXPECT_TRUE(message2.is_power_on_set());
 }
 
-} // namespace intex_eco5220g
-} // namespace esphome
+}  // namespace intex_eco5220g
+}  // namespace esphome

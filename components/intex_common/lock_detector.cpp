@@ -1,6 +1,7 @@
 #include "lock_detector.h"
-#include "esphome/core/log.h"
+
 #include "esphome/core/hal.h"
+#include "esphome/core/log.h"
 
 namespace esphome {
 namespace intex_common {
@@ -23,5 +24,5 @@ void LockDetector::update(bool is_screen_blank, bool is_power_on) {
   }
 }
 
-}
-}
+}  // namespace intex_common
+}  // namespace esphome

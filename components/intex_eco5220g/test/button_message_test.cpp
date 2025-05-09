@@ -1,6 +1,7 @@
 #include "../button_message.h"
-#include <gtest/gtest.h>
+
 #include <gmock/gmock.h>
+#include <gtest/gtest.h>
 
 using ::testing::ElementsAreArray;
 
@@ -37,5 +38,5 @@ TEST(ButtonMessageTest, SetMultiple) {
   EXPECT_THAT(message.raw_message(), ElementsAreArray({0xCF, 0x30}));
 }
 
-} // namespace intex_eco5220g
-} // namespace esphome
+}  // namespace intex_eco5220g
+}  // namespace esphome

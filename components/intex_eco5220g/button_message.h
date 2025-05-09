@@ -1,7 +1,7 @@
 #pragma once
 #include <array>
-#include <cstdint>
 #include <cstddef>
+#include <cstdint>
 
 namespace esphome {
 namespace intex_eco5220g {
@@ -34,5 +34,5 @@ class ButtonMessage {
     RawMessage raw_message_{0xFF, 0x00};
 };
 
-} //namespace intex_eco5220g
-} //namespace esphome
+}  // namespace intex_eco5220g
+}  // namespace esphome

@@ -1,8 +1,9 @@
 #pragma once
 
+#include <cstdint>
+
 #include "esphome/core/helpers.h"
 #include "esphome/core/optional.h"
-#include <cstdint>
 
 namespace esphome {
 namespace intex_common {
@@ -21,5 +22,5 @@ class LockDetector {
     uint32_t last_blank_time_{0};
 };
 
-}
-}
+}  // namespace intex_common
+}  // namespace esphome
