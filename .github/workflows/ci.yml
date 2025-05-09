@@ -43,14 +43,14 @@ jobs:
           - dev
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v4
       - name: ESPHome ${{ matrix.esphome-version }}
-        uses: esphome/build-action@v7.0.0
+        uses: esphome/build-action@v7
         with:
           yaml-file: ${{ matrix.file }}.yaml
           version: ${{ matrix.esphome-version }}
       - name: ESPHome ${{ matrix.esphome-version }} Factory
-        uses: esphome/build-action@v7.0.0
+        uses: esphome/build-action@v7
         with:
           yaml-file: ${{ matrix.file }}.factory.yaml
           version: ${{ matrix.esphome-version }}
@@ -60,13 +60,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v4
 
       - name: Build Tests
-        uses: threeal/cmake-action@v2.1.0
+        uses: threeal/cmake-action@v2
 
       - name: Run Tests
-        uses: threeal/ctest-action@v1.1.0
+        uses: threeal/ctest-action@v1
         with:
           args: --output-junit test-results.xml
 
