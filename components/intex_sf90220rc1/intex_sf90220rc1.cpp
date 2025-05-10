@@ -37,11 +37,17 @@ void IntexSF90220RC1::loop() {
   this->timer_immobilizer_.update();
 }
 
-optional<bool> IntexSF90220RC1::is_power_on() const { return this->last_power_state_; }
+optional<bool> IntexSF90220RC1::is_power_on() const {
+  return this->last_power_state_;
+}
 
-void IntexSF90220RC1::press_power() { this->try_tx(messages::kPowerPressed, "power"); }
+void IntexSF90220RC1::press_power() {
+  this->try_tx(messages::kPowerPressed, "power");
+}
 
-optional<bool> IntexSF90220RC1::is_locked() const { return this->lock_detector_.is_locked(); }
+optional<bool> IntexSF90220RC1::is_locked() const {
+  return this->lock_detector_.is_locked();
+}
 
 void IntexSF90220RC1::press_toggle_lock() {
   this->try_tx(messages::kLockUnlockPressed, "lock/unlock");
@@ -187,7 +193,9 @@ bool IntexSF90220RC1::try_tx(std::array<uint8_t, 4> message, const char* log_des
   return true;
 }
 
-void IntexSF90220RC1::dump_config() { ESP_LOGCONFIG(TAG, "Intex SF90220RC1 filter pump"); }
+void IntexSF90220RC1::dump_config() {
+  ESP_LOGCONFIG(TAG, "Intex SF90220RC1 filter pump");
+}
 
 }  // namespace intex_sf90220rc1
 }  // namespace esphome

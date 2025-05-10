@@ -3,3 +3,4 @@ BasedOnStyle: Google
 IndentWidth: 2
 IndentAccessModifiers: true
 ColumnLimit: 100
+AllowShortFunctionsOnASingleLine: Inline
