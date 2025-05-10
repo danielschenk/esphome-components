@@ -1,7 +1,9 @@
 add_library(
   intex_common
+  STATIC
   common_hmi.h
   monotonic_clock.h
   serial.cpp
   serial.h
 )
+esphome_component(intex_common)
