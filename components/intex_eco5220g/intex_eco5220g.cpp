@@ -8,6 +8,9 @@ namespace intex_eco5220g {
 
 static const char *TAG = "intex_eco5220g";
 
+IntexECO5220G::IntexECO5220G(intex_common::MonotonicClock &clock, intex_common::Serial &serial)
+    : clock_(clock), serial_(serial) {}
+
 void IntexECO5220G::setup() {}
 
 void IntexECO5220G::loop() {}

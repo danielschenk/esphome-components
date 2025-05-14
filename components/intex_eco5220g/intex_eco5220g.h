@@ -17,13 +17,14 @@ class Switch;
 
 namespace intex_common {
 class MonotonicClock;
-}
+class Serial;
+}  // namespace intex_common
 
 namespace intex_eco5220g {
 
 class IntexECO5220G : public Component, public intex_common::CommonHmi {
   public:
-    explicit IntexECO5220G(intex_common::MonotonicClock &clock);
+    explicit IntexECO5220G(intex_common::MonotonicClock &clock, intex_common::Serial &serial);
 
     void setup() override;
     void loop() override;
@@ -44,6 +45,8 @@ class IntexECO5220G : public Component, public intex_common::CommonHmi {
     intex_common::MonotonicClock &clock_;
     intex_common::LockDetector lock_detector_{clock_};
     intex_common::TimerImmobilizer timer_immobilizer_{*this, clock_};
+
+    intex_common::Serial &serial_;
 
     optional<bool> last_power_state_;
     optional<TimerSetting> timer_setting_;
