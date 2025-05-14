@@ -1,12 +1,13 @@
 #include "timer_immobilizer.h"
 
 #include "common_hmi.h"
-#include "esphome/core/hal.h"
+#include "monotonic_clock.h"
 
 namespace esphome {
 namespace intex_common {
 
-TimerImmobilizer::TimerImmobilizer(CommonHmi& hmi) : hmi_(hmi) {}
+TimerImmobilizer::TimerImmobilizer(CommonHmi& hmi, MonotonicClock& clock)
+    : hmi_(hmi), clock_(clock) {}
 
 void TimerImmobilizer::update() {
   auto is_power_on = this->hmi_.is_power_on();
@@ -22,7 +23,7 @@ void TimerImmobilizer::update() {
     return;
   }
 
-  uint32_t now = millis();
+  uint32_t now = clock_.millis();
   if (timer_setting != CommonHmi::TimerSetting::INFINITE &&
       now - this->last_button_press_ >= this->kButtonPressIntervalMillis) {
     // try changing timer to infinite

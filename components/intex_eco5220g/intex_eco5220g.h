@@ -15,10 +15,16 @@ namespace switch_ {
 class Switch;
 }
 
+namespace intex_common {
+class MonotonicClock;
+}
+
 namespace intex_eco5220g {
 
-class IntexSF90220RC1 : public Component, public intex_common::CommonHmi {
+class IntexECO5220G : public Component, public intex_common::CommonHmi {
   public:
+    explicit IntexECO5220G(intex_common::MonotonicClock &clock);
+
     void setup() override;
     void loop() override;
     void dump_config() override;
@@ -35,8 +41,9 @@ class IntexSF90220RC1 : public Component, public intex_common::CommonHmi {
     void press_increment_timer_setting() override;
 
   protected:
-    intex_common::LockDetector lock_detector_;
-    intex_common::TimerImmobilizer timer_immobilizer_{*this};
+    intex_common::MonotonicClock &clock_;
+    intex_common::LockDetector lock_detector_{clock_};
+    intex_common::TimerImmobilizer timer_immobilizer_{*this, clock_};
 
     optional<bool> last_power_state_;
     optional<TimerSetting> timer_setting_;

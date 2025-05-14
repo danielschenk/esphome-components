@@ -48,7 +48,7 @@ class IntexSF90220RC1 : public Component, public uart::UARTDevice, public intex_
     intex_common::LockDetector lock_detector_{clock_};
     void update_lock_state(uint8_t display_byte, bool power_on);
 
-    intex_common::TimerImmobilizer timer_immobilizer_{*this};
+    intex_common::TimerImmobilizer timer_immobilizer_{*this, clock_};
 
     bool try_tx(std::array<uint8_t, 4> message, const char *log_description = nullptr);
     static constexpr uint32_t kTxIntervalMillis = 250;

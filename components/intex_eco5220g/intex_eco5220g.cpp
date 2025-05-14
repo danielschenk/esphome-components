@@ -1,7 +1,6 @@
 #include "intex_eco5220g.h"
 
 #include "esphome/components/switch/switch.h"
-#include "esphome/core/hal.h"
 #include "esphome/core/log.h"
 
 namespace esphome {

@@ -11,17 +11,17 @@ add_library(
   intex_eco5220g.h
 )
 
+target_link_libraries(
+  intex_eco5220g
+  intex_common
+  esphome_stub
+)
+
 add_executable(
   intex_eco5220g_test
   test/button_message_test.cpp
   test/display_message_test.cpp
   test/intex_eco5220g_test.cpp
-)
-
-target_link_libraries(
-  intex_eco5220g
-  intex_common
-  esphome_stub
 )
 
 target_link_libraries(

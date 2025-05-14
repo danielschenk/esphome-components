@@ -9,6 +9,11 @@ add_library(
   monotonic_clock.h
   serial.cpp
   serial.h
+  timer_immobilizer.cpp
+  timer_immobilizer.h
+
+  mock/mock_monotonic_clock.h
+  mock/mock_serial.h
 )
 esphome_component(intex_common)
 
