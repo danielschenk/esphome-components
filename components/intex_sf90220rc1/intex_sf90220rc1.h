@@ -5,6 +5,7 @@
 #include <deque>
 
 #include "esphome/components/intex_common/common_hmi.h"
+#include "esphome/components/intex_common/esphome_monotonic_clock.h"
 #include "esphome/components/intex_common/lock_detector.h"
 #include "esphome/components/intex_common/timer_immobilizer.h"
 #include "esphome/components/uart/uart.h"
@@ -43,7 +44,8 @@ class IntexSF90220RC1 : public Component, public uart::UARTDevice, public intex_
     void update_power_state(bool state, const char *source);
     void update_timer_state(uint8_t display_byte);
 
-    intex_common::LockDetector lock_detector_;
+    intex_common::EspHomeMonotonicClock clock_;
+    intex_common::LockDetector lock_detector_{clock_};
     void update_lock_state(uint8_t display_byte, bool power_on);
 
     intex_common::TimerImmobilizer timer_immobilizer_{*this};
