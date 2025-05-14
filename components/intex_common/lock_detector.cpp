@@ -1,25 +1,33 @@
 #include "lock_detector.h"
 
-#include "esphome/core/hal.h"
 #include "esphome/core/log.h"
+#include "monotonic_clock.h"
 
 namespace esphome {
 namespace intex_common {
 
 static constexpr const char *TAG = "intex_common";
 
+LockDetector::LockDetector(const MonotonicClock &clock) : clock_(clock) {}
+
 void LockDetector::update(bool is_screen_blank, bool is_power_on) {
-  uint32_t now = millis();
-  if (is_screen_blank) {
+  uint32_t now = clock_.millis();
+  if (!is_power_on) {
+    this->is_locked_ = true;
+  } else if (is_screen_blank) {
     this->is_locked_ = false;
     this->last_blank_time_ = now;
-  } else if (!is_power_on || now - this->last_blank_time_ > this->kBlinkTimeoutMillis) {
+  } else if (now - this->last_blank_time_ > this->kBlinkTimeoutMillis) {
     this->is_locked_ = true;
   }
 
   if (this->is_locked_.has_value()) {
-    if (this->dedup_is_locked_.next(*this->is_locked_)) {
+    if (this->prev_is_locked_.has_value()) {
+      if (*this->prev_is_locked_ == *this->is_locked_) {
+        return;
+      }
       ESP_LOGI(TAG, "Settings %slocked", *this->is_locked_ ? "" : "un");
+      this->prev_is_locked_ = this->is_locked_;
     }
   }
 }
