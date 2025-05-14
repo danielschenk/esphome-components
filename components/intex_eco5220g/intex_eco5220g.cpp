@@ -1,5 +1,7 @@
 #include "intex_eco5220g.h"
 
+#include "button_message.h"
+#include "esphome/components/intex_common/serial.h"
 #include "esphome/components/switch/switch.h"
 #include "esphome/core/log.h"
 
@@ -19,7 +21,11 @@ optional<bool> IntexECO5220G::is_power_on() const {
   return this->last_power_state_;
 }
 
-void IntexECO5220G::press_power() {}
+void IntexECO5220G::press_power() {
+  ButtonMessage message;
+  message.set_button(ButtonMessage::Button::kTogglePower);
+  this->serial_.send(message.raw_message());
+}
 
 optional<bool> IntexECO5220G::is_locked() const {
   return this->lock_detector_.is_locked();
