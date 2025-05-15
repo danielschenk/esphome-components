@@ -13,12 +13,12 @@ intex_eco5220g_ns = cg.esphome_ns.namespace('intex_eco5220g')
 intex_common_ns = cg.esphome_ns.namespace('intex_common')
 IntexECO5220G = intex_eco5220g_ns.class_('IntexECO5220G', cg.Component)
 EspHomeMonotonicClock = intex_common_ns.class_('EspHomeMonotonicClock')
-EspHomeRmtSerial = intex_eco5220g_ns.class_('EspHomeRmtSerial', cg.Component)
+RmtSerial = intex_eco5220g_ns.class_('RmtSerial', cg.Component)
 
 CONFIG_SCHEMA = cv.Schema({
     cv.GenerateID(): cv.declare_id(IntexECO5220G),
     cv.GenerateID(CONF_CLOCK_ID): cv.declare_id(EspHomeMonotonicClock),
-    cv.GenerateID(CONF_SERIAL_ID): cv.declare_id(EspHomeRmtSerial),
+    cv.GenerateID(CONF_SERIAL_ID): cv.declare_id(RmtSerial),
 }).extend(cv.COMPONENT_SCHEMA)
 
 CHLORINATOR_COMPONENT_SCHEMA = cv.Schema(

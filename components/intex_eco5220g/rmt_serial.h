@@ -6,9 +6,9 @@
 namespace esphome {
 namespace intex_eco5220g {
 
-class EspHomeRmtSerial : public Component, public intex_common::Serial {
+class RmtSerial : public Component, public intex_common::Serial {
   public:
-    EspHomeRmtSerial() = default;
+    RmtSerial() = default;
 
     void setup() override;
 
