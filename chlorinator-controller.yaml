@@ -1,0 +1,41 @@
+esphome:
+  name: pool-chlorinator
+  friendly_name: Pool chlorinator controller
+  # Automatically add the mac address to the name
+  # so you can use a single firmware for all devices
+  name_add_mac_suffix: true
+
+esp32:
+  board: nodemcu-32s
+
+# To be able to get logs from the device via serial and api.
+logger:
+
+# API is a requirement of the dashboard import.
+api:
+
+# OTA is required for Over-the-Air updating
+ota:
+  - platform: esphome
+
+wifi:
+  # Set up a wifi access point using the device name above
+  ap:
+
+# In combination with the `ap` this allows the user
+# to provision wifi credentials to the device.
+captive_portal:
+
+intex_eco5220g:
+  id: pool_chlorinator
+
+switch:
+  - platform: intex_eco5220g
+    chlorinator_id: pool_chlorinator
+    power_switch:
+      id: pool_chlorinator_power
+      name: Pool chlorinator
+      icon: mdi:chart-bubble
+
+external_components:
+  - source: components

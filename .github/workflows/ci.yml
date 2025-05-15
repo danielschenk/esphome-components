@@ -34,6 +34,7 @@ jobs:
       matrix:
         #### Modify below here to match your project ####
         file:
+          - chlorinator-controller
           - pump-controller
         #### Modify above here to match your project ####
 
