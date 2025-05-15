@@ -31,7 +31,11 @@ optional<bool> IntexECO5220G::is_locked() const {
   return this->lock_detector_.is_locked();
 }
 
-void IntexECO5220G::press_toggle_lock() {}
+void IntexECO5220G::press_toggle_lock() {
+  ButtonMessage message;
+  message.set_button(ButtonMessage::Button::kToggleLock);
+  this->serial_.send(message.raw_message());
+}
 
 intex_common::CommonHmi::TimerSetting IntexECO5220G::timer_setting() const {
   if (!this->timer_setting_.has_value()) {

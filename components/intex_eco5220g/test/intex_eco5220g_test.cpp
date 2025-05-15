@@ -29,5 +29,13 @@ TEST_F(IntexECO5220GTest, PressPowerButton) {
   intex_eco5220g_.press_power();
 }
 
+TEST_F(IntexECO5220GTest, PressToggleLockButton) {
+  ButtonMessage message;
+  message.set_button(ButtonMessage::Button::kToggleLock);
+  auto raw = message.raw_message();
+  EXPECT_CALL(serial_, send(PointedElementsAreArray(raw), raw.size()));
+  intex_eco5220g_.press_toggle_lock();
+}
+
 }  // namespace intex_eco5220g
 }  // namespace esphome
