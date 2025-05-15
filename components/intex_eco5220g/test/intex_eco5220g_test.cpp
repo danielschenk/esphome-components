@@ -10,8 +10,8 @@
 namespace esphome {
 namespace intex_eco5220g {
 
-MATCHER_P2(CElementsAreArray, expected, size, "") {
-  return memcmp(arg, expected, size * sizeof(expected[0])) == 0;
+MATCHER_P(PointedElementsAreArray, expected, "") {
+  return memcmp(arg, expected.data(), expected.size() * sizeof(expected[0])) == 0;
 }
 
 class IntexECO5220GTest : public ::testing::Test {
@@ -25,7 +25,7 @@ TEST_F(IntexECO5220GTest, PressPowerButton) {
   ButtonMessage message;
   message.set_button(ButtonMessage::Button::kTogglePower);
   auto raw = message.raw_message();
-  EXPECT_CALL(serial_, send(CElementsAreArray(raw.data(), raw.size()), raw.size()));
+  EXPECT_CALL(serial_, send(PointedElementsAreArray(raw), raw.size()));
   intex_eco5220g_.press_power();
 }
 
