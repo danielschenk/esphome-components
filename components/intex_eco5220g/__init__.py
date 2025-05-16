@@ -31,8 +31,10 @@ CHLORINATOR_COMPONENT_SCHEMA = cv.Schema(
 def to_code(config):
     clock = cg.new_Pvariable(config[CONF_CLOCK_ID])
     serial = cg.new_Pvariable(config[CONF_SERIAL_ID])
-    chlorinator = cg.new_Pvariable(config[CONF_ID], cg.RawExpression(f"*{clock}"),
-                                   cg.RawExpression(f"*{serial}"))
+    chlorinator = cg.new_Pvariable(config[CONF_ID])
+
+    cg.add(chlorinator.set_clock(clock))
+    cg.add(chlorinator.set_serial(serial))
 
     yield cg.register_component(serial, config)
     yield cg.register_component(chlorinator, config)

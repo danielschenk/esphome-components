@@ -16,9 +16,13 @@ MATCHER_P(PointedElementsAreArray, expected, "") {
 
 class IntexECO5220GTest : public ::testing::Test {
   protected:
+    void SetUp() override {
+      intex_eco5220g_.set_serial(&serial_);
+      intex_eco5220g_.set_clock(&clock_);
+    }
     intex_common::MockMonotonicClock clock_;
     intex_common::MockSerial serial_;
-    IntexECO5220G intex_eco5220g_{clock_, serial_};
+    IntexECO5220G intex_eco5220g_;
 };
 
 TEST_F(IntexECO5220GTest, PressPowerButton) {
@@ -35,6 +39,20 @@ TEST_F(IntexECO5220GTest, PressToggleLockButton) {
   auto raw = message.raw_message();
   EXPECT_CALL(serial_, send(PointedElementsAreArray(raw), raw.size()));
   intex_eco5220g_.press_toggle_lock();
+}
+
+TEST_F(IntexECO5220GTest, NoClock) {
+  intex_eco5220g_.set_clock(nullptr);
+  intex_eco5220g_.setup();
+  EXPECT_TRUE((intex_eco5220g_.get_component_state() & Component::COMPONENT_STATE_FAILED) ==
+              Component::COMPONENT_STATE_FAILED);
+}
+
+TEST_F(IntexECO5220GTest, NoSerial) {
+  intex_eco5220g_.set_serial(nullptr);
+  intex_eco5220g_.setup();
+  EXPECT_TRUE((intex_eco5220g_.get_component_state() & Component::COMPONENT_STATE_FAILED) ==
+              Component::COMPONENT_STATE_FAILED);
 }
 
 }  // namespace intex_eco5220g

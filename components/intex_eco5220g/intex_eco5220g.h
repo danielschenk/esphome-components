@@ -24,13 +24,15 @@ namespace intex_eco5220g {
 
 class IntexECO5220G : public Component, public intex_common::CommonHmi {
   public:
-    explicit IntexECO5220G(intex_common::MonotonicClock &clock, intex_common::Serial &serial);
+    IntexECO5220G() = default;
+
+    void set_serial(intex_common::Serial *serial) { this->serial_ = serial; }
+    void set_clock(intex_common::MonotonicClock *clock) { this->clock_ = clock; }
+    void set_power_switch(switch_::Switch *power_switch) { this->power_switch_ = power_switch; }
 
     void setup() override;
     void loop() override;
     void dump_config() override;
-
-    void set_power_switch(switch_::Switch *power_switch) { this->power_switch_ = power_switch; }
 
     optional<bool> is_power_on() const override;
     void press_power() override;
@@ -42,11 +44,11 @@ class IntexECO5220G : public Component, public intex_common::CommonHmi {
     void press_increment_timer_setting() override;
 
   protected:
-    intex_common::MonotonicClock &clock_;
-    intex_common::LockDetector lock_detector_{clock_};
-    intex_common::TimerImmobilizer timer_immobilizer_{*this, clock_};
+    intex_common::MonotonicClock *clock_{nullptr};
+    intex_common::LockDetector lock_detector_{*clock_};
+    intex_common::TimerImmobilizer timer_immobilizer_{*this, *clock_};
 
-    intex_common::Serial &serial_;
+    intex_common::Serial *serial_{nullptr};
 
     optional<bool> last_power_state_;
     optional<TimerSetting> timer_setting_;

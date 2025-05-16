@@ -10,10 +10,18 @@ namespace intex_eco5220g {
 
 static const char *TAG = "intex_eco5220g";
 
-IntexECO5220G::IntexECO5220G(intex_common::MonotonicClock &clock, intex_common::Serial &serial)
-    : clock_(clock), serial_(serial) {}
-
-void IntexECO5220G::setup() {}
+void IntexECO5220G::setup() {
+  if (this->serial_ == nullptr) {
+    ESP_LOGE(TAG, "Serial not set");
+    this->mark_failed();
+    return;
+  }
+  if (this->clock_ == nullptr) {
+    ESP_LOGE(TAG, "Clock not set");
+    this->mark_failed();
+    return;
+  }
+}
 
 void IntexECO5220G::loop() {}
 
@@ -24,7 +32,7 @@ optional<bool> IntexECO5220G::is_power_on() const {
 void IntexECO5220G::press_power() {
   ButtonMessage message;
   message.set_button(ButtonMessage::Button::kTogglePower);
-  this->serial_.send(message.raw_message());
+  this->serial_->send(message.raw_message());
 }
 
 optional<bool> IntexECO5220G::is_locked() const {
@@ -34,7 +42,7 @@ optional<bool> IntexECO5220G::is_locked() const {
 void IntexECO5220G::press_toggle_lock() {
   ButtonMessage message;
   message.set_button(ButtonMessage::Button::kToggleLock);
-  this->serial_.send(message.raw_message());
+  this->serial_->send(message.raw_message());
 }
 
 intex_common::CommonHmi::TimerSetting IntexECO5220G::timer_setting() const {
