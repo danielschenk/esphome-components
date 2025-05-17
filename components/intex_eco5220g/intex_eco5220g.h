@@ -25,6 +25,8 @@ namespace intex_eco5220g {
 class IntexECO5220G : public Component, public intex_common::CommonHmi {
   public:
     IntexECO5220G() = default;
+    IntexECO5220G(const IntexECO5220G &) = delete;
+    IntexECO5220G &operator=(const IntexECO5220G &) = delete;
 
     void set_serial(intex_common::Serial *serial) { this->serial_ = serial; }
     void set_clock(intex_common::MonotonicClock *clock) { this->clock_ = clock; }
